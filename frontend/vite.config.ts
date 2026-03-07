@@ -8,6 +8,9 @@ import webFontDownload from "vite-plugin-webfont-dl"
 import { defineConfig } from "vitest/config"
 
 export default defineConfig({
+  build: {
+    chunkSizeWarningLimit: 750
+  },
   plugins: [
     imageOptimizer(),
     react(),
@@ -23,7 +26,7 @@ export default defineConfig({
       }
     }),
     tailwindcss(),
-    webFontDownload(["https://fonts.googleapis.com/css2?family=Ruslan+Display&display=swap"], {
+    webFontDownload(["https://fonts.googleapis.com/css2?family=Righteous&display=swap"], {
       assetsSubfolder: "fonts",
       injectAsStyleTag: false
     }),

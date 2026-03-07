@@ -1,4 +1,4 @@
-# <img src="../frontend/public/m00d.png" title="m00d" alt="m00d logo" style="vertical-align: middle;"> m00d (Backend) <img src="../frontend/public/m00d.png" title="m00d" alt="m00d logo" style="vertical-align: middle;"> <!-- markdownlint-disable-line MD013 -->
+# <img src="../frontend/public/m00d.png" title="m00d" alt="m00d logo" style="vertical-align: middle;"> m00d (Backend)
 
 > - Mood tracker
 

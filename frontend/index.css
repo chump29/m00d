@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 /*
 name: https://colorkit.co/color/123456
 oklch: https://oklch.com/
 */
 
 @theme {
-  --font-title: ruslan display, sans-serif;
+  --color-blue1: oklch(53.95% 0.1102 259.86deg); /* 476eae, Sail On */
+  --color-blue2: oklch(63.55% 0.0849 219.37deg); /* 4797ae, Rainy Mood */
+  --color-green1: oklch(70.44% 0.0974 191.74deg); /* 48b3af, Verdigris */
+  --color-green2: oklch(85.67% 0.1171 139.75deg); /* a7e399, Grape Green */
+  --color-purple: oklch(76.56% 0.1214 319.87deg); /* d599e3, Somewhere in a Fairytale */
+  --color-yellow: oklch(97.14% 0.1257 112.85deg); /* f6ff99, Walking on Sunshine */
+  --font-title: "Righteous", sans-serif;
 }

@@ -58,6 +58,9 @@ export default function Display(): JSX.Element {
         show: false
       }
     },
+    markers: {
+      colors: ["#48b3af"]
+    },
     tooltip: {
       theme: "dark",
       marker: {
@@ -85,14 +88,15 @@ export default function Display(): JSX.Element {
             : `${parts[1]}/${parts[2]}/${parts[0]}`
         },
         style: {
-          colors: "#fff"
+          colors: "#f6ff99"
         }
       },
       title: {
         offsetY: -35,
         text: "DATE",
         style: {
-          color: "#fff",
+          color: "#d599e3",
+          fontFamily: "Righteous",
           fontSize: "16px"
         }
       }
@@ -102,14 +106,15 @@ export default function Display(): JSX.Element {
       min: 1,
       labels: {
         style: {
-          colors: "#fff"
+          colors: "#f6ff99"
         }
       },
       title: {
         offsetX: -5,
         text: "MOOD",
         style: {
-          color: "#fff",
+          color: "#d599e3",
+          fontFamily: "Righteous",
           fontSize: "16px"
         }
       }
@@ -118,6 +123,7 @@ export default function Display(): JSX.Element {
 
   const series: ApexOptions["series"] = [
     {
+      color: "#f6ff99",
       data: moods,
       name: "Mood",
       parsing: {
@@ -166,23 +172,23 @@ export default function Display(): JSX.Element {
   return (
     <>
       <div className="text-center mt-10">
-        <div className="mb-10 text-3xl font-bold" data-testid="date">
+        <div className="mb-10 text-3xl font-bold text-yellow" data-testid="date">
           {format(new Date(toZonedTime(new Date(), Intl.DateTimeFormat().resolvedOptions().timeZone)), "PPPP")}
         </div>
-        <div className="mb-1 text-2xl">Current mood:</div>
-        <div className="mb-5 text-xs italic">
+        <div className="mb-1 text-2xl text-green2 font-bold">Current mood:</div>
+        <div className="mb-5 text-xs italic text-green1 font-bold">
           (1 = Sad &nbsp; &mdash; &nbsp; 3 = Neutral &nbsp; &mdash; &nbsp; 5 = Happy)
         </div>
         <form className="inline">
-          <HandThumbDownIcon className="size-7 inline mr-5" />
+          <HandThumbDownIcon className="size-7 inline mr-5 text-yellow" />
           {[...Array.from({ length: 5 }, (_, i) => i + 1)].map((i: number) => (
             <span className="inline" key={i}>
-              <label className="mr-1 font-bold" htmlFor={`mood${i}`}>
+              <label className="mr-1 font-bold text-yellow" htmlFor={`mood${i}`}>
                 {i}
               </label>
               <input
                 checked={mood === i}
-                className="mr-5 cursor-pointer"
+                className="mr-5 cursor-pointer accent-purple"
                 id={`mood${i}`}
                 name="mood"
                 onChange={handleChange}
@@ -192,14 +198,14 @@ export default function Display(): JSX.Element {
               />
             </span>
           ))}
-          <HandThumbUpIcon className="size-7 inline" />
+          <HandThumbUpIcon className="size-7 inline text-yellow" />
           <div className="mt-5">
             <button
-              className="rounded-lg border px-2 py-1 cursor-pointer bg-gray-600 font-bold"
+              className="rounded-lg border border-yellow px-2 py-1 cursor-pointer bg-blue font-bold font-title text-green2"
               onClick={handleClick}
               title="Submit Mood"
               type="button">
-              Submit Mood
+              Submit Mood ╰┈➤
             </button>
           </div>
         </form>
@@ -207,7 +213,7 @@ export default function Display(): JSX.Element {
       <div className="mt-10 text-center mx-10" id="chart">
         {moods?.length ? (
           <div>
-            <span className="text-xs float-right italic font-bold mr-5 top-5 relative">Scroll to zoom</span>
+            <span className="text-xs float-right italic font-bold mr-5 top-5 relative text-yellow">Scroll to zoom</span>
             <Chart height={300} options={options} series={series} type="line" />
           </div>
         ) : (
