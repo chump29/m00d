@@ -1,0 +1,39 @@
+services:
+  m00d-frontend:
+    container_name: m00d-frontend
+    image: git.postfmly.com/admin/m00d-frontend:arm64
+    restart: unless-stopped
+    depends_on:
+      - m00d-backend
+    ports:
+      - "92:80"
+    environment:
+      - TZ=America/Chicago
+    labels:
+      - wud.display.name=m00d (Frontend)
+      - homepage.group=Personal
+      - homepage.name=m00d
+      - homepage.icon=https://mood.postfmly.com/m00d.png
+      - homepage.href=https://mood.postfmly.com/
+      - homepage.description=mood.postfmly.com
+
+  m00d-backend:
+    container_name: m00d-backend
+    image: git.postfmly.com/admin/m00d-backend:arm64
+    restart: unless-stopped
+    ports:
+      - "5558:5558"
+    volumes:
+      - db:/backend/db
+    labels:
+      - wud.display.name=m00d (Backend)
+    stop_signal: SIGINT
+
+volumes:
+  db:
+
+networks: {}
+
+x-dockge:
+  urls:
+    - https://mood.postfmly.com

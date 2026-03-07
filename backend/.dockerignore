@@ -1,0 +1,12 @@
+__pycache__/
+.dockerignore
+.python-version
+.venv/
+*.sh
+api.rest
+db/
+Dockerfile
+features/
+README.md
+
+!healthcheck.sh

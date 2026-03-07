@@ -1,0 +1,9 @@
+.htmlignore
+.stylelint*
+*.md
+*.sh
+biome.json
+dist/
+node_modules/
+
+!healthcheck.sh

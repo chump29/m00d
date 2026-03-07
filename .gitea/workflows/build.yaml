@@ -1,0 +1,145 @@
+name: Build m00d
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 24
+
+jobs:
+  check-frontend:
+    runs-on: amd64
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Install PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ./frontend/package.json
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
+
+      - name: Linting
+        run: pnpm run lint:ci
+
+      - name: Testing
+        run: pnpm run test
+
+  check-backend:
+    runs-on: amd64
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: ./backend/.python-version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Linting
+        run: uv run pylint api.py
+
+      - name: Testing
+        run: uv run behave --stop
+
+  amd64:
+    needs: [check-frontend, check-backend]
+    runs-on: amd64
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Log into repository
+        uses: docker/login-action@v3
+        with:
+          registry: git.postfmly.com
+          username: admin
+          password: ${{ secrets.PASSWORD }}
+
+      - name: Build and push frontend
+        run: |
+          cd frontend
+          docker buildx build --platform linux/amd64 --tag git.postfmly.com/admin/m00d-frontend:amd64 --push .
+
+      - name: Build and push backend
+        run: |
+          cd backend
+          docker buildx build --platform linux/amd64 --tag git.postfmly.com/admin/m00d-backend:amd64 --push .
+
+  arm64:
+    needs: [check-frontend, check-backend]
+    runs-on: arm64
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Log into repository
+        uses: docker/login-action@v3
+        with:
+          registry: git.postfmly.com
+          username: admin
+          password: ${{ secrets.PASSWORD }}
+
+      - name: Build and push frontend
+        run: |
+          cd frontend
+          docker buildx build --platform linux/arm64 --tag git.postfmly.com/admin/m00d-frontend:arm64 --push .
+
+      - name: Build and push backend
+        run: |
+          cd backend
+          docker buildx build --platform linux/arm64 --tag git.postfmly.com/admin/m00d-backend:arm64 --push .
+
+  manifest:
+    needs: [amd64, arm64]
+    runs-on: amd64
+    steps:
+      - name: Log into repository
+        uses: docker/login-action@v3
+        with:
+          registry: git.postfmly.com
+          username: admin
+          password: ${{ secrets.PASSWORD }}
+
+      - name: Create frontend manifest
+        run: |
+          docker manifest create \
+            git.postfmly.com/admin/m00d-frontend:latest \
+            git.postfmly.com/admin/m00d-frontend:amd64 \
+            git.postfmly.com/admin/m00d-frontend:arm64
+
+      - name: Push frontend manifest
+        run: docker manifest push git.postfmly.com/admin/m00d-frontend:latest
+
+      - name: Create backend manifest
+        run: |
+          docker manifest create \
+            git.postfmly.com/admin/m00d-backend:latest \
+            git.postfmly.com/admin/m00d-backend:amd64 \
+            git.postfmly.com/admin/m00d-backend:arm64
+
+      - name: Push backend manifest
+        run: docker manifest push git.postfmly.com/admin/m00d-backend:latest

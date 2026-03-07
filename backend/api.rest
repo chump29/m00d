@@ -1,0 +1,112 @@
+@host = http://localhost:5558/api/
+
+###
+
+@rnd_id = {{$randomInt 10000 20000}}
+@rnd_mood = {{$randomInt 1 6}}
+@rnd_date = {{$randomInt 2100 2102}}-{{$randomInt 10 13}}-{{$randomInt 10 32}}
+
+###
+
+// Get API version
+
+GET {{host}}version
+
+###
+
+// Get all moods
+
+GET {{host}}get
+
+###
+
+// Get mood by ID
+// NOTE: mood ID does not exist
+
+GET {{host}}get/{{rnd_id}}
+
+###
+
+// Get mood by ID
+
+GET {{host}}get/1
+
+###
+
+// Get mood by date
+// NOTE: mood date does not exist
+
+GET {{host}}get_by_date/{{rnd_date}}
+
+###
+
+// Add mood
+
+POST {{host}}add
+Content-Type: application/json
+
+{
+    "mood": {{rnd_mood}},
+    "date": "{{$localDatetime 'YYYY-MM-DD'}}"
+}
+
+###
+
+// Add mood (FOR TESTING ONLY)
+
+POST {{host}}add
+Content-Type: application/json
+
+{
+    "mood": {{rnd_mood}},
+    "date": "{{rnd_date}}"
+}
+
+###
+
+// Update mood by ID
+// NOTE: mood ID does not exist
+
+PUT {{host}}update/{{rnd_id}}
+Content-Type: application/json
+
+{
+    "mood": {{rnd_mood}},
+    "date": "{{rnd_date}}"
+}
+
+###
+
+// Update mood by ID
+
+PUT {{host}}update/1
+Content-Type: application/json
+
+// NOTE: pass exisisting data elements
+{
+    "mood": {{rnd_mood}},
+    "date": "{{rnd_date}}"
+}
+
+###
+
+// Delete mood by ID
+// Error: mood does not exist
+
+DELETE {{host}}delete/{{rnd_id}}
+
+###
+
+// Delete mood by ID
+
+DELETE {{host}}delete/1
+
+###
+
+// Get documentation
+
+// Swagger
+GET {{host}}docs
+###
+// ReDoc
+GET {{host}}redoc

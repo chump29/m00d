@@ -1,0 +1,219 @@
+import { type ChangeEvent, type JSX, useEffect, useState } from "react"
+
+import { HandThumbDownIcon, HandThumbUpIcon } from "@heroicons/react/24/solid"
+import { type ApexOptions } from "apexcharts"
+import { format } from "date-fns"
+import { toZonedTime } from "date-fns-tz"
+import Chart from "react-apexcharts"
+
+const API_URL: string = import.meta.env.VITE_API_URL || ""
+
+interface IMood {
+  date: string // * NOTE: Converted to DateField in API
+  id?: number
+  mood: number
+}
+
+export default function Display(): JSX.Element {
+  const [mood, setMood] = useState<number>(3)
+  const [moods, setMoods] = useState<IMood[]>([])
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setMood(parseInt(event.target.value, 10))
+  }
+
+  const handleClick = async (): Promise<void> => {
+    await fetch(`${API_URL}/api/add/`, {
+      body: JSON.stringify({
+        date: format(new Date(toZonedTime(new Date(), Intl.DateTimeFormat().resolvedOptions().timeZone)), "yyyy-MM-dd"),
+        mood: mood
+      } as IMood),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error(`Status: ${response.status}`)
+        }
+        return response.json()
+      })
+      .then((mood: IMood) => {
+        if (!mood) {
+          console.error(mood)
+          throw new Error("Error adding mood")
+        }
+        getMoods()
+      })
+      .catch(console.error)
+  }
+
+  const options: ApexOptions = {
+    chart: {
+      dropShadow: {
+        enabled: true
+      },
+      toolbar: {
+        show: false
+      }
+    },
+    tooltip: {
+      theme: "dark",
+      marker: {
+        show: false
+      },
+      x: {
+        show: false
+      },
+      y: {
+        formatter: (num: number): string => {
+          return getTitle(num)
+        }
+      }
+    },
+    xaxis: {
+      labels: {
+        rotateAlways: true,
+        formatter: (val: string): string => {
+          if (!val) {
+            return ""
+          }
+          const parts = val.split("-")
+          return parts[0] === new Date().getFullYear().toString()
+            ? `${parts[1]}/${parts[2]}`
+            : `${parts[1]}/${parts[2]}/${parts[0]}`
+        },
+        style: {
+          colors: "#fff"
+        }
+      },
+      title: {
+        offsetY: -35,
+        text: "DATE",
+        style: {
+          color: "#fff",
+          fontSize: "16px"
+        }
+      }
+    },
+    yaxis: {
+      max: 5,
+      min: 1,
+      labels: {
+        style: {
+          colors: "#fff"
+        }
+      },
+      title: {
+        offsetX: -5,
+        text: "MOOD",
+        style: {
+          color: "#fff",
+          fontSize: "16px"
+        }
+      }
+    }
+  }
+
+  const series: ApexOptions["series"] = [
+    {
+      data: moods,
+      name: "Mood",
+      parsing: {
+        x: "date",
+        y: "mood"
+      }
+    }
+  ]
+
+  const getTitle = (num: number): string => {
+    switch (num) {
+      case 1:
+        return "Sad 😢"
+      case 2:
+        return "Kind of sad 🙁"
+      case 3:
+        return "Neutral 😐"
+      case 4:
+        return "Kind of happy 🙂"
+      case 5:
+        return "Happy 😀"
+      default:
+        return "Unknown"
+    }
+  }
+
+  const getMoods = async (): Promise<void> => {
+    fetch(`${API_URL}/api/get`)
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error(`Status: ${response.status}`)
+        }
+        return response.json()
+      })
+      .then((moods: IMood[]) => {
+        setMoods(moods)
+      })
+      .catch(console.error)
+  }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies(getMoods): not a dependency
+  useEffect(() => {
+    getMoods()
+  }, [])
+
+  return (
+    <>
+      <div className="text-center mt-10">
+        <div className="mb-10 text-3xl font-bold" data-testid="date">
+          {format(new Date(toZonedTime(new Date(), Intl.DateTimeFormat().resolvedOptions().timeZone)), "PPPP")}
+        </div>
+        <div className="mb-1 text-2xl">Current mood:</div>
+        <div className="mb-5 text-xs italic">
+          (1 = Sad &nbsp; &mdash; &nbsp; 3 = Neutral &nbsp; &mdash; &nbsp; 5 = Happy)
+        </div>
+        <form className="inline">
+          <HandThumbDownIcon className="size-7 inline mr-5" />
+          {[...Array.from({ length: 5 }, (_, i) => i + 1)].map((i: number) => (
+            <span className="inline" key={i}>
+              <label className="mr-1 font-bold" htmlFor={`mood${i}`}>
+                {i}
+              </label>
+              <input
+                checked={mood === i}
+                className="mr-5 cursor-pointer"
+                id={`mood${i}`}
+                name="mood"
+                onChange={handleChange}
+                title={getTitle(i)}
+                type="radio"
+                value={i}
+              />
+            </span>
+          ))}
+          <HandThumbUpIcon className="size-7 inline" />
+          <div className="mt-5">
+            <button
+              className="rounded-lg border px-2 py-1 cursor-pointer bg-gray-600 font-bold"
+              onClick={handleClick}
+              title="Submit Mood"
+              type="button">
+              Submit Mood
+            </button>
+          </div>
+        </form>
+      </div>
+      <div className="mt-10 text-center mx-10" id="chart">
+        {moods?.length ? (
+          <div>
+            <span className="text-xs float-right italic font-bold mr-5 top-5 relative">Scroll to zoom</span>
+            <Chart height={300} options={options} series={series} type="line" />
+          </div>
+        ) : (
+          <span className="italic rounded-lg border p-2">No mood data to show</span>
+        )}
+      </div>
+    </>
+  )
+}

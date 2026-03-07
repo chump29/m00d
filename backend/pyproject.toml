@@ -1,0 +1,57 @@
+[build-system]
+requires = ["uv_build >= 0.9, < 0.10"]
+build-backend = "uv_build"
+
+[project]
+name = "m00d-backend"
+version = "1.0.0"
+description = "Mood tracker (Backend)"
+license = "GPL-3.0-only"
+authors = [
+    {name = "Chris Post"}
+]
+keywords = ["mood", "tracker"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment :: Mozilla",
+    "Framework :: FastAPI",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Private :: Do Not Upload",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Typing :: Typed"
+]
+dependencies = [
+    "fastapi[standard-no-fastapi-cloud-cli]>=0.127.0",
+    "peewee>=3.18.3",
+    "pydantic>=2.12.5",
+]
+requires-python = ">= 3.14"
+
+[project.urls]
+GitHub = "https://github.com/chump29/m00d"
+
+[project.optional-dependencies]
+dev = [
+    "behave>=1.3.3",
+    "pip-review>=1.3.0",
+    "pylint>=4.0.4"
+]
+
+[tool.uv]
+python-downloads = "manual"
+
+[tool.uv.build-backend]
+namespace = true
+source-exclude = [
+    ".dockerignore",
+    ".python-version",
+    "*.sh",
+    "/features",
+    "Dockerfile",
+    "README.md",
+    "uv.lock"
+]

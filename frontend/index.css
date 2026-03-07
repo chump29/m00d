@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+name: https://colorkit.co/color/123456
+oklch: https://oklch.com/
+*/
+
+@theme {
+  --font-title: ruslan display, sans-serif;
+}

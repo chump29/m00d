@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" class="dark">
+
+<head>
+  <link rel="icon" href="m00d.png">
+  <link rel="stylesheet" href="index.css">
+  <meta charset="utf-8">
+  <meta name="robots" content="none">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <%= title %>
+  </title>
+</head>
+
+<body class="dark:bg-gray-800 text-white text-xl">
+  <main>
+    <div class="font-bold text-7xl text-center mt-10 font-title">
+      <img src="m00d.png" alt="<%= title %> logo" title="<%= title %>" class="inline mr-5">
+      <%= title %>
+      <img src="m00d.png" alt="<%= title %> logo" title="<%= title %>" class="inline ml-5">
+    </div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="./src/main.tsx"></script>
+  </main>
+  <footer class="text-center text-xs bg-slate-700 text-gray-200 fixed bottom-0 w-[100%] italic">
+    UI &nbsp;
+    <span id="frontend"></span>
+    &nbsp; &middot; &nbsp;API &nbsp;
+    <span id="backend"></span>
+  </footer>
+</body>
+
+</html>
