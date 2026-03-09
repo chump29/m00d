@@ -93,13 +93,13 @@ Content-Type: application/json
 // Delete mood by ID
 // Error: mood does not exist
 
-DELETE {{host}}delete/{{rnd_id}}
+//DELETE {{host}}delete/{{rnd_id}}
 
 ###
 
 // Delete mood by ID
 
-DELETE {{host}}delete/1
+//DELETE {{host}}delete/1
 
 ###
 

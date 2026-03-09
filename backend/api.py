@@ -137,18 +137,18 @@ def update(pk: int, mood: MoodDTO) -> MoodDTO | None:
         return None
 
 
-@api.delete("/api/delete/{pk}")
-def delete(pk: int) -> bool:
-    """Delete mood by ID"""
-    try:
-        if DEBUG:
-            print(f"Deleting row id: {pk}")
-        menu = Mood.get(Mood.id == pk)
-        menu.delete_instance()
-        return True
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        print(e)
-        return False
+# @api.delete("/api/delete/{pk}")
+# def delete(pk: int) -> bool:
+#    """Delete mood by ID"""
+#    try:
+#        if DEBUG:
+#            print(f"Deleting row id: {pk}")
+#        menu = Mood.get(Mood.id == pk)
+#        menu.delete_instance()
+#        return True
+#    except Exception as e:  # pylint: disable=broad-exception-caught
+#        print(e)
+#        return False
 
 
 if __name__ == "__main__":

@@ -83,9 +83,7 @@ export default function Display(): JSX.Element {
             return ""
           }
           const parts = val.split("-")
-          return parts[0] === new Date().getFullYear().toString()
-            ? `${parts[1]}/${parts[2]}`
-            : `${parts[1]}/${parts[2]}/${parts[0]}`
+          return `${parts[1]}/${parts[2]}/${parts[0]}`
         },
         style: {
           colors: "#f6ff99"
