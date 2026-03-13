@@ -1,6 +1,6 @@
 {
   "biome.configurationPath": "./biome.json",
-  "biome.lsp.bin": "./node_modules/@biomejs/biome/bin/biome",
+  "biome.lsp.bin": "./frontend/node_modules/@biomejs/biome/bin/biome",
   "biome.suggestInstallingGlobally": false,
   "css.lint.unknownAtRules": "ignore",
   "editor.detectIndentation": true,
@@ -10,10 +10,9 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "git.autofetch": true,
-	"python.analysis.typeCheckingMode": "basic",
-	  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
-	  "python.terminal.activateEnvironment": true,
-
+  "python.analysis.typeCheckingMode": "basic",
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
+  "python.terminal.activateEnvironment": true,
   "terminal.integrated.scrollback": 10000,
   "[css][dockercompose][javacript][javascriptreact][json][jsonc][typescript][typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
@@ -48,6 +47,9 @@
   },
   "files.associations": {
     "*.css": "tailwindcss"
+  },
+  "json.schemaDownload.trustedDomains": {
+    "https://raw.githubusercontent.com/DavidAnson/markdownlint/": true
   },
   "markdownlint.config": {
     "MD013": {
