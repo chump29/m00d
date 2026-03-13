@@ -59,7 +59,9 @@ export default function Display(): JSX.Element {
       }
     },
     markers: {
-      colors: ["#48b3af"]
+      colors: [
+        "#48b3af"
+      ]
     },
     tooltip: {
       theme: "dark",
@@ -179,7 +181,14 @@ export default function Display(): JSX.Element {
         </div>
         <form className="inline">
           <HandThumbDownIcon className="size-7 inline mr-5 text-yellow" />
-          {[...Array.from({ length: 5 }, (_, i) => i + 1)].map((i: number) => (
+          {[
+            ...Array.from(
+              {
+                length: 5
+              },
+              (_, i) => i + 1
+            )
+          ].map((i: number) => (
             <span className="inline" key={i}>
               <label className="mr-1 font-bold text-yellow" htmlFor={`mood${i}`}>
                 {i}

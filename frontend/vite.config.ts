@@ -1,7 +1,6 @@
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import removeAttributes from "rollup-plugin-jsx-remove-attributes"
-import { ViteImageOptimizer as imageOptimizer } from "vite-plugin-image-optimizer"
 import version from "vite-plugin-package-version"
 import simpleHtml from "vite-plugin-simple-html"
 import webFontDownload from "vite-plugin-webfont-dl"
@@ -12,7 +11,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 750
   },
   plugins: [
-    imageOptimizer(),
     react(),
     removeAttributes({
       usage: "vite"
@@ -26,18 +24,32 @@ export default defineConfig({
       }
     }),
     tailwindcss(),
-    webFontDownload(["https://fonts.googleapis.com/css2?family=Righteous&display=swap"], {
-      assetsSubfolder: "fonts",
-      injectAsStyleTag: false
-    }),
+    webFontDownload(
+      [
+        "https://fonts.googleapis.com/css2?family=Righteous&display=swap"
+      ],
+      {
+        assetsSubfolder: "fonts",
+        injectAsStyleTag: false
+      }
+    ),
     version()
   ],
   test: {
     environment: "jsdom",
     globals: true,
-    include: ["./src/**/*.test.tsx"],
-    reporters: [["verbose", { summary: true }]],
     setupFiles: "./src/setup.ts",
-    silent: true
+    silent: true,
+    include: [
+      "./src/**/*.test.tsx"
+    ],
+    reporters: [
+      [
+        "verbose",
+        {
+          summary: true
+        }
+      ]
+    ]
   }
 })

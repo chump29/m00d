@@ -11,7 +11,15 @@
         "organizeImports": {
           "level": "on",
           "options": {
-            "groups": [":NODE:", ":BLANK_LINE:", "react", ":BLANK_LINE:", ":PACKAGE:", ":BLANK_LINE:", ":PATH:"]
+            "groups": [
+              ":NODE:",
+              ":BLANK_LINE:",
+              "react",
+              ":BLANK_LINE:",
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              ":PATH:"
+            ]
           }
         },
         "useSortedKeys": {
@@ -30,14 +38,21 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!.pnpm-store", "!!**/*.html", "!!dist", "!!node_modules", "!!package.json"]
+    "includes": [
+      "**",
+      "!!.pnpm-store",
+      "!!**/*.html",
+      "!!dist",
+      "!!node_modules",
+      "!!package.json"
+    ]
   },
   "formatter": {
     "attributePosition": "auto",
     "bracketSameLine": false,
     "bracketSpacing": true,
     "enabled": true,
-    "expand": "auto",
+    "expand": "always",
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
@@ -199,10 +214,12 @@
       "complexity": {
         "noBannedTypes": "error",
         "noUselessThisAlias": "error",
-        "noUselessTypeConstraint": "error"
+        "noUselessTypeConstraint": "error",
+        "useArrowFunction": "error"
       },
       "correctness": {
         "noChildrenProp": "error",
+        "noUnusedFunctionParameters": "error",
         "noUnusedVariables": "error",
         "useJsxKeyInIterable": "error",
         "useUniqueElementIds": "off"
@@ -219,7 +236,8 @@
         "noNamespace": "error",
         "useArrayLiterals": "error",
         "useAsConstAssertion": "error",
-        "useBlockStatements": "off"
+        "useBlockStatements": "off",
+        "useConst": "error"
       },
       "suspicious": {
         "noCommentText": "error",
@@ -236,7 +254,9 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.{js,ts,tsx}"],
+      "includes": [
+        "**/*.{js,ts,tsx}"
+      ],
       "linter": {
         "rules": {
           "complexity": {
@@ -277,7 +297,9 @@
             "noInferrableTypes": "off",
             "useImportType": {
               "level": "error",
-              "options": { "style": "inlineType" }
+              "options": {
+                "style": "inlineType"
+              }
             }
           },
           "suspicious": {
@@ -311,7 +333,11 @@
             "useGetterReturn": "error",
             "noConsole": {
               "level": "error",
-              "options": { "allow": ["error"] }
+              "options": {
+                "allow": [
+                  "error"
+                ]
+              }
             }
           }
         }
