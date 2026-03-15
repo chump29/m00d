@@ -14,7 +14,7 @@ interface IMood {
   mood: number
 }
 
-export default function Display(): JSX.Element {
+const Display = (): JSX.Element => {
   const [mood, setMood] = useState<number>(3)
   const [moods, setMoods] = useState<IMood[]>([])
 
@@ -230,3 +230,5 @@ export default function Display(): JSX.Element {
     </>
   )
 }
+
+export default Display
