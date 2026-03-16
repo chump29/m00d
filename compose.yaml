@@ -25,6 +25,8 @@ services:
       - "5558:5558"
     volumes:
       - db:/backend/db
+    environment:
+      - TZ=America/Chicago
     labels:
       - wud.display.name=m00d (Backend)
     stop_signal: SIGINT

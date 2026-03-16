@@ -1,5 +1,8 @@
 {
-	"author": "Chris Post",
+	"author": {
+		"name": 	"Chris Post",
+		"email": "admin@postfmly.com"
+	},
 	"description": "Mood tracker (Frontend)",
 	"homepage": "https://github.com/chump29/m00d",
 	"keywords": [
