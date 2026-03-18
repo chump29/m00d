@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "m00d-backend"
-version = "1.0.0"
+version = "1.0.1"
 description = "Mood tracker (Backend)"
 license = "GPL-3.0-only"
 authors = [

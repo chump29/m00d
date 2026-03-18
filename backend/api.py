@@ -4,8 +4,8 @@
 
 from dataclasses import dataclass
 from datetime import date
-from html import escape
-from os import environ, getenv, makedirs, path
+from functools import cache
+from os import makedirs, path
 from tomllib import load
 
 from box import Box
@@ -73,16 +73,13 @@ api = FastAPI(
 )
 
 
+@cache
 @api.get("/api/version")
 def get_version() -> str | None:
     """Returns version"""
     try:
-        version = getenv("BACKEND_VERSION")
-        if not version:
-            with open(file="pyproject.toml", mode="rb") as pyproject:
-                version = Box(load(pyproject)).project.version
-                environ["BACKEND_VERSION"] = version
-        return escape(str(version))
+        with open(file="pyproject.toml", mode="rb") as pyproject:
+            return Box(load(pyproject)).project.version
     except Exception:  # pylint: disable=broad-exception-caught
         console.print_exception()
         return None
@@ -172,5 +169,5 @@ def delete(pk: int) -> bool:
 
 
 if __name__ == "__main__":
-    log("Running local server...")
+    log("✨ Running local server...")
     run(app="api:api", host="0.0.0.0", port=5558, reload=True)
