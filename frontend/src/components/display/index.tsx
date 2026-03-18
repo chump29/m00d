@@ -181,7 +181,7 @@ const Display = (): JSX.Element => {
         <div className="mb-5 text-xs italic text-green1 font-bold">
           (1 = Sad &nbsp; &mdash; &nbsp; 3 = Neutral &nbsp; &mdash; &nbsp; 5 = Happy)
         </div>
-        <form className="inline">
+        <form className="inline" data-testid="form">
           <HandThumbDownIcon className="size-7 inline mr-5 text-yellow" />
           {[
             ...Array.from(
@@ -219,7 +219,7 @@ const Display = (): JSX.Element => {
           </div>
         </form>
       </div>
-      <div className="mt-10 text-center mx-10" id="chart">
+      <div className="mt-10 text-center mx-10" data-testid="chart">
         {moods?.length ? (
           <div>
             <span className="text-xs float-right italic font-bold mr-5 top-5 relative text-yellow">Scroll to zoom</span>
