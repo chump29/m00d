@@ -28,7 +28,7 @@ dependencies = [
     "peewee>=4.0.2",
     "pydantic>=2.12.5",
     "python-box~=7.0",
-    "rich>=14.3.3",
+    "rich>=14.3.3"
 ]
 requires-python = ">=3.14"
 

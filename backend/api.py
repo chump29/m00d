@@ -12,7 +12,7 @@ from box import Box
 from fastapi import FastAPI
 from peewee import AutoField, DateField, IntegerField, Model, SqliteDatabase
 from playhouse.shortcuts import model_to_dict
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 from rich.console import Console
 from rich.traceback import install as catch_exceptions
 from uvicorn import run
@@ -27,15 +27,16 @@ catch_exceptions()
 
 
 class MoodDTO(BaseModel):
-    """Mood data model"""
+    """Mood domain model"""
 
     id: int | None = None
-    mood: int
+    mood: int = Field(ge=1, le=5)
     date: date
+    model_config = ConfigDict(extra="forbid")
 
 
 class Mood(Model):
-    """m00d DB model"""
+    """m00d database model"""
 
     id = AutoField()
     mood = IntegerField()
