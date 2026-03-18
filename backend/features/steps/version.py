@@ -23,5 +23,12 @@ def step_impl(context):
 
 @then("version is returned")
 def step_impl(context):
-    print(context.version)
     assert context.real_version == context.version, "Invalid version"
+
+
+@then("version is cached")
+def step_impl(_):
+    get_version()
+    get_version()
+    v = get_version.cache_info()
+    assert v.hits == 2 and v.misses == 1, "Version not cached"
