@@ -52,7 +52,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.8",
-		"@tailwindcss/vite": "0.0.0-insiders.f302fce",
+		"@tailwindcss/vite": "4.2.2",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.2",
 		"@types/node": "^25.5.0",
@@ -69,7 +69,7 @@
 		"sharp": "^0.34.5",
 		"stylelint": "^17.4.0",
 		"stylelint-config-standard": "^40.0.0",
-		"tailwindcss": "^4.2.1",
+		"tailwindcss": "^4.2.2",
 		"typescript": "~5.9.3",
 		"vite": "^8.0.0",
 		"vite-plugin-package-version": "^1.1.0",
