@@ -60,10 +60,10 @@ jobs:
         run: uv sync --extra dev
 
       - name: Linting
-        run: uv run pylint api.py
+        run: ./lint.sh
 
       - name: Testing
-        run: uv run behave --stop
+        run: ./test.sh
 
   amd64:
     needs: [check-frontend, check-backend]

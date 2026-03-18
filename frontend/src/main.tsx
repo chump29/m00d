@@ -3,6 +3,7 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
 import Display from "./components/display"
+import { log } from "./components/shared"
 
 const api_url: string = import.meta.env.VITE_API_URL || ""
 
@@ -35,7 +36,7 @@ fetch(`${api_url}/api/version`, {
     }
   })
   .catch((e: Error) => {
-    console.error(e)
+    log(e)
     if (obj) {
       obj.innerText = "N/A"
     }

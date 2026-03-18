@@ -26,7 +26,7 @@ RUN rm uv.lock
 
 FROM python:${PYTHON_VERSION}-alpine
 
-LABEL org.opencontainers.image.authors="admin@postfmly.com" \
+LABEL org.opencontainers.image.authors="Chris Post <admin@postfmly.com>" \
     org.opencontainers.image.description="Mood tracker (Backend)" \
     org.opencontainers.image.licenses="GPL-3.0-only" \
     org.opencontainers.image.title="m00d (Backend)" \
@@ -39,9 +39,10 @@ WORKDIR /backend
 
 COPY --from=build /backend .
 
+ENV PATH="/backend/.venv/bin:$PATH"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PATH="/backend/.venv/bin:$PATH"
+ENV TZ=Etc/GMT
 
 HEALTHCHECK --interval=60s --start-interval=5s CMD source /backend/healthcheck.sh
 

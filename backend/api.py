@@ -8,15 +8,22 @@ from html import escape
 from os import environ, getenv, makedirs, path
 from tomllib import load
 
+from box import Box
 from fastapi import FastAPI
 from peewee import AutoField, DateField, IntegerField, Model, SqliteDatabase
+from playhouse.shortcuts import model_to_dict
 from pydantic import BaseModel
+from rich.console import Console
+from rich.traceback import install as catch_exceptions
 from uvicorn import run
+
+DEBUG = False
 
 DB_PATH = "./db/"
 DB_FILE = "m00d.db"
 
-DEBUG = True
+console = Console()
+catch_exceptions()
 
 
 class MoodDTO(BaseModel):
@@ -24,7 +31,7 @@ class MoodDTO(BaseModel):
 
     id: int | None = None
     mood: int
-    date: date  # YYYY-MM-DD
+    date: date
 
 
 class Mood(Model):
@@ -41,15 +48,24 @@ class Mood(Model):
         database = SqliteDatabase(DB_PATH + DB_FILE, pragmas={"journal_mode": "wal"})
 
 
+def log(msg: str, info: str = ""):
+    """Log to console"""
+    s = f"[bold green]{msg}[/bold green]"
+    return console.log(s) if not info else console.log(f"{s}: [cyan]{info}[/cyan]")
+
+
 if not path.exists(DB_PATH):
     if DEBUG:
-        print(f"Creating path: {DB_PATH}")
+        log("Creating path", DB_PATH)
     makedirs(DB_PATH)
 
 if not path.exists(DB_PATH + DB_FILE):
     if DEBUG:
-        print(f"Creating database: {DB_FILE}")
+        log("Creating database", DB_FILE)
     Mood.create_table()
+else:
+    if DEBUG:
+        log("Using database", DB_PATH + DB_FILE)
 
 api = FastAPI(
     docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url="/api/redoc"
@@ -63,11 +79,11 @@ def get_version() -> str | None:
         version = getenv("BACKEND_VERSION")
         if not version:
             with open(file="pyproject.toml", mode="rb") as pyproject:
-                version = load(pyproject)["project"]["version"]
+                version = Box(load(pyproject)).project.version
                 environ["BACKEND_VERSION"] = version
         return escape(str(version))
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        print(e)
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
         return None
 
 
@@ -76,10 +92,10 @@ def get() -> list[MoodDTO] | None:
     """Get all moods"""
     try:
         if DEBUG:
-            print(f"Getting rows: {Mood.select().count(None)}")
+            log("Getting rows", str(Mood.select().count(None)))
         return list(Mood.select().order_by(Mood.date.asc()).dicts()) or None
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        print(e)
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
         return None
 
 
@@ -88,10 +104,10 @@ def get_one(pk: int) -> MoodDTO | None:
     """Get mood by ID"""
     try:
         if DEBUG:
-            print(f"Getting row id: {pk}")
+            log("Getting row id", str(pk))
         return Mood.get_by_id(pk) or None
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        print(e)
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
         return None
 
 
@@ -100,7 +116,7 @@ def get_by_date(d: date) -> MoodDTO | None:
     """Get mood by date"""
     try:
         if DEBUG:
-            print(f"Getting row by date: {d}")
+            log("Getting row by date", str(d))
         return Mood.get(Mood.date == d) or None
     except Exception:  # pylint: disable=broad-exception-caught
         return None
@@ -111,13 +127,16 @@ def add(mood: MoodDTO) -> MoodDTO | None:
     """Add mood"""
     try:
         if DEBUG:
-            print(f"Adding row: mood={mood.mood}, date={mood.date}")
+            log("Adding row", f"mood={mood.mood} date={mood.date}")
         d = get_by_date(mood.date)
         if d and d.id:
+            if DEBUG:
+                log("➪ Updating instead of adding")
             return update(d.id, mood)
-        return Mood.create(mood=mood.mood, date=mood.date) or None
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        print(e)
+        m = Mood.create(mood=mood.mood, date=mood.date)
+        return MoodDTO.model_validate(model_to_dict(m)) if m else None
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
         return None
 
 
@@ -126,30 +145,31 @@ def update(pk: int, mood: MoodDTO) -> MoodDTO | None:
     """Update mood by ID"""
     try:
         if DEBUG:
-            print(f"Updating row id: {pk}")
+            log("Updating row id", str(pk))
         return (
             get_one(pk)
             if Mood.update(mood=mood.mood).where(Mood.id == pk).execute() > 0
             else None
         )
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        print(e)
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
         return None
 
 
-# @api.delete("/api/delete/{pk}")
-# def delete(pk: int) -> bool:
-#    """Delete mood by ID"""
-#    try:
-#        if DEBUG:
-#            print(f"Deleting row id: {pk}")
-#        menu = Mood.get(Mood.id == pk)
-#        menu.delete_instance()
-#        return True
-#    except Exception as e:  # pylint: disable=broad-exception-caught
-#        print(e)
-#        return False
+@api.delete("/api/delete/{pk}")
+def delete(pk: int) -> bool:
+    """Delete mood by ID"""
+    try:
+        if DEBUG:
+            log("Deleting row id", str(pk))
+        menu = Mood.get(Mood.id == pk)
+        menu.delete_instance()
+        return True
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
+        return False
 
 
 if __name__ == "__main__":
+    log("Running local server...")
     run(app="api:api", host="0.0.0.0", port=5558, reload=True)

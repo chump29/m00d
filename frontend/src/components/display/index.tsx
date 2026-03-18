@@ -6,6 +6,8 @@ import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
 import Chart from "react-apexcharts"
 
+import { log } from "../shared"
+
 const API_URL: string = import.meta.env.VITE_API_URL || ""
 
 interface IMood {
@@ -41,12 +43,12 @@ const Display = (): JSX.Element => {
       })
       .then((mood: IMood) => {
         if (!mood) {
-          console.error(mood)
+          log(mood)
           throw new Error("Error adding mood")
         }
         getMoods()
       })
-      .catch(console.error)
+      .catch(log)
   }
 
   const options: ApexOptions = {
@@ -161,7 +163,7 @@ const Display = (): JSX.Element => {
       .then((moods: IMood[]) => {
         setMoods(moods)
       })
-      .catch(console.error)
+      .catch(log)
   }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies(getMoods): not a dependency

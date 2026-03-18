@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/.pnpm-store \
 
 FROM nginx:alpine
 
-LABEL org.opencontainers.image.authors="admin@postfmly.com" \
+LABEL org.opencontainers.image.authors="Chris Post <admin@postfmly.com>" \
     org.opencontainers.image.description="Mood tracker (Frontend)" \
     org.opencontainers.image.licenses="GPL-3.0-only" \
     org.opencontainers.image.title="m00d (Frontend)" \
@@ -37,6 +37,8 @@ WORKDIR /usr/share/nginx/html
 COPY --from=build /app/dist .
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+ENV TZ=Etc/GMT
 
 HEALTHCHECK --interval=60s CMD source /usr/share/nginx/html/healthcheck.sh
 
