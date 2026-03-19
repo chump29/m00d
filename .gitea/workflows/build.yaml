@@ -9,6 +9,7 @@ on:
 
 env:
   NODE_VERSION: 24
+  SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
 
 jobs:
   check-frontend:
@@ -20,16 +21,16 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Install Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{env.NODE_VERSION}}
-          cache: 'pnpm'
-
       - name: Install PNPM
         uses: pnpm/action-setup@v5
         with:
           package_json_file: ./frontend/package.json
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
@@ -67,7 +68,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .ruff_cache
-          key: ruff-${{ hashFiles('.pre-commit-config.yaml') }}
+          key: ruff
 
       - name: Testing
         run: ./test.sh
