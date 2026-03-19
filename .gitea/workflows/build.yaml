@@ -65,8 +65,8 @@ jobs:
       - name: Cache Ruff cache
         uses: actions/cache@v5
         with:
-          path: .ruff-cache
-          key: ${{ runner.os }}-ruff-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('**/*.py') }}
+          path: .ruff_cache
+          key: ruff-${{ hashFiles('/backend/.pre-commit-config.yaml') }}
 
       - name: Testing
         run: ./test.sh
