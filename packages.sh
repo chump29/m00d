@@ -25,7 +25,7 @@ for _pkg in latest amd64 arm64; do
     --silent \
     --url "${_frontend_url}${_pkg}" \
     --header "authorization: token $_token" \
-    > /dev/null
+    --output /dev/null
 
   echo -e "   ╰› ${_yellow}Deleting ${_pkg^^} backend package${_nc}"
   curl --request DELETE \
@@ -33,7 +33,7 @@ for _pkg in latest amd64 arm64; do
     --silent \
     --url "${_backend_url}${_pkg}" \
     --header "authorization: token $_token" \
-    > /dev/null
+    --output /dev/null
 
   echo
 done
