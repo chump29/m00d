@@ -1,4 +1,4 @@
-@host = http://localhost:5558/api/
+@host = http://localhost:{{$dotenv API_PORT}}/api/
 
 ###
 

@@ -311,6 +311,7 @@ dependencies = [
     { name = "peewee" },
     { name = "pydantic" },
     { name = "python-box" },
+    { name = "python-dotenv" },
     { name = "rich" },
 ]
 
@@ -333,6 +334,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pylint", marker = "extra == 'dev'", specifier = ">=4.0.5" },
     { name = "python-box", specifier = "~=7.0" },
+    { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "rich", specifier = ">=14.3.3" },
     { name = "types-peewee", marker = "extra == 'dev'", specifier = ">=4.0.0.20260223" },
 ]
