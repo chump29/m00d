@@ -66,7 +66,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .ruff-cache
-          key: ${{ runner.os }}-ruff-${{ hashFiles("pyproject.toml") }}-${{ hashFiles("**/*.py") }}
+          key: ${{ runner.os }}-ruff-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('**/*.py') }}
 
       - name: Testing
         run: ./test.sh
