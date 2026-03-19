@@ -4,4 +4,3 @@ __pycache__/
 db/
 dist/
 node_modules/
-packages.rest
