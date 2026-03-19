@@ -9,6 +9,7 @@
 		"humao.rest-client",
 		"ms-azuretools.vscode-containers",
 		"ms-python.black-formatter",
+		"ms-python.isort",
 		"ms-python.pylint",
 		"redhat.vscode-yaml",
 		"timonwong.shellcheck"

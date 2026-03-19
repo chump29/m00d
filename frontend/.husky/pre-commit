@@ -1,6 +1,14 @@
-cd frontend
+#!/usr/bin/env -S bash -e
+
+cd frontend || exit
 
 pnpm exec lint-staged
 pnpm run test
+
+cd ../backend || exit
+
+uv run pre-commit run --all-files
+./lint.sh
+./test.sh
 
 #exit 1

@@ -10,11 +10,12 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "git.autofetch": true,
+  "isort.args": ["--profile", "black"],
   "python.analysis.typeCheckingMode": "basic",
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
   "python.terminal.activateEnvironment": true,
   "terminal.integrated.scrollback": 10000,
-  "[css][dockercompose][javacript][javascriptreact][json][jsonc][typescript][typescriptreact]": {
+  "[css][dockercompose][javascript][javascriptreact][json][jsonc][typescript][typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[dockercompose]": {
@@ -36,7 +37,11 @@
     "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
   },
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
   },
   "[sh]": {
     "editor.defaultFormatter": "timonwong.shellcheck"

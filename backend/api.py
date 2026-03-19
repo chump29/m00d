@@ -3,10 +3,10 @@
 """API Service"""
 
 from dataclasses import dataclass
-from datetime import date
 from functools import cache
-from os import makedirs, path
+from pathlib import Path
 from tomllib import load
+from typing import TYPE_CHECKING
 
 from box import Box
 from fastapi import FastAPI
@@ -16,6 +16,11 @@ from pydantic import BaseModel, ConfigDict, Field
 from rich.console import Console
 from rich.traceback import install as catch_exceptions
 from uvicorn import run
+
+if TYPE_CHECKING:
+    from datetime import date
+else:
+    date = object  # pylint: disable=invalid-name
 
 DEBUG = False
 
@@ -49,24 +54,25 @@ class Mood(Model):
         database = SqliteDatabase(DB_PATH + DB_FILE, pragmas={"journal_mode": "wal"})
 
 
-def log(msg: str, info: str = ""):
+def log(msg: str, info: str = "") -> None:
     """Log to console"""
     s = f"[bold green]{msg}[/bold green]"
-    return console.log(s) if not info else console.log(f"{s}: [cyan]{info}[/cyan]")
+    if info:
+        s = f"{s}: [cyan]{info}[/cyan]"
+    console.log(s)
 
 
-if not path.exists(DB_PATH):
+if not Path(DB_PATH).exists():
     if DEBUG:
         log("Creating path", DB_PATH)
-    makedirs(DB_PATH)
+    Path(DB_PATH).mkdir(parents=True)
 
-if not path.exists(DB_PATH + DB_FILE):
+if not Path(DB_PATH + DB_FILE).exists():
     if DEBUG:
         log("Creating database", DB_FILE)
     Mood.create_table()
-else:
-    if DEBUG:
-        log("Using database", DB_PATH + DB_FILE)
+elif DEBUG:
+    log("Using database", DB_PATH + DB_FILE)
 
 api = FastAPI(
     docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url="/api/redoc"
@@ -76,9 +82,9 @@ api = FastAPI(
 @cache
 @api.get("/api/version")
 def get_version() -> str | None:
-    """Returns version"""
+    """Return version"""
     try:
-        with open(file="pyproject.toml", mode="rb") as pyproject:
+        with Path("pyproject.toml").open("rb") as pyproject:
             return Box(load(pyproject)).project.version
     except Exception:  # pylint: disable=broad-exception-caught
         console.print_exception()
@@ -162,12 +168,12 @@ def delete(pk: int) -> bool:
             log("Deleting row id", str(pk))
         menu = Mood.get(Mood.id == pk)
         menu.delete_instance()
-        return True
     except Exception:  # pylint: disable=broad-exception-caught
         console.print_exception()
         return False
+    return True
 
 
 if __name__ == "__main__":
     log("✨ Running local server...")
-    run(app="api:api", host="0.0.0.0", port=5558, reload=True)
+    run(app="api:api", host="0.0.0.0", port=5558, reload=True)  # noqa: S104

@@ -72,10 +72,10 @@ port@{shape: brace, label: "&nbsp; FastAPI exposes port 5558"}
 
 #### Scripts:
 
-| 📜 Script |      🔧 Command (Full)      | 🔧 Command (Short) |
-|:---------:|:---------------------------:|:------------------:|
-|   Lint    | `uv run pylint --verbose .` |    `./lint.sh`     |
-|   Test    |   `uv run behave --stop`    |    `./test.sh`     |
+| 📜 Script | 🔧 Command  |
+|:---------:|:-----------:|
+|   Lint    | `./lint.sh` |
+|   Test    | `./test.sh` |
 
 #### API Deployment:
 
@@ -106,3 +106,13 @@ port@{shape: brace, label: "&nbsp; FastAPI exposes port 5558"}
 | Create Specific |   `uv venv -p [version]`    |
 |    Activate     | `source .venv/bin/activate` |
 |   Deactivate    |        `deactivate`         |
+
+---
+
+### 🛰️ Git & CI/CD
+
+- **Pre-Commit:** Staged files are automatically linted and tested
+- **Github Actions:** Lints, tests, builds, and pushes multi-architecture images to repository
+  - latest
+    - amd64
+    - arm64
