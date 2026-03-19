@@ -1,9 +1,5 @@
 #!/usr/bin/env -S bash -e
 
-TERM=xterm-256color
-
-clear
-
 _frontend_url="https://git.postfmly.com/api/v1/packages/$GITHUB_VAULT_USER/container/m00d-frontend/"
 _backend_url="https://git.postfmly.com/api/v1/packages/$GITHUB_VAULT_USER/container/m00d-backend/"
 
