@@ -2,7 +2,6 @@
 
 """API Service"""
 
-from argparse import ArgumentParser
 from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
@@ -27,44 +26,10 @@ else:
 DB_PATH = "./db/"
 DB_FILE = "m00d.db"
 
+DEBUG = False
+
 console = Console()
 catch_exceptions()
-
-PORT = int(Box(dotenv_values()).API_PORT)
-
-api = FastAPI(
-    docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url="/api/redoc"
-)
-
-
-@cache
-@api.get("/api/version")
-def get_version() -> str | None:
-    """Return version"""
-    try:
-        with Path("pyproject.toml").open("rb") as pyproject:
-            return Box(load(pyproject)).project.version
-    except Exception:  # pylint: disable=broad-exception-caught
-        console.print_exception()
-        return None
-
-
-parser = ArgumentParser(description="Mood tracker (Backend)")
-parser.add_argument("-d", "--debug", help="enable debug mode", action="store_true")
-parser.add_argument(
-    "port", help=f"port number (default: {PORT})", type=int, default=PORT, nargs="?"
-)
-parser.add_argument(
-    "-v",
-    "--version",
-    help="display version and exit",
-    action="version",
-    version=str(get_version()),
-)
-args, _ = parser.parse_known_args()
-
-DEBUG: int = args.debug
-PORT: int = args.port or PORT
 
 
 class MoodDTO(BaseModel):
@@ -109,6 +74,22 @@ if not Path(DB_PATH + DB_FILE).exists():
     Mood.create_table()
 elif DEBUG:
     log("Using database", DB_PATH + DB_FILE)
+
+api = FastAPI(
+    docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url="/api/redoc"
+)
+
+
+@cache
+@api.get("/api/version")
+def get_version() -> str | None:
+    """Return version"""
+    try:
+        with Path("pyproject.toml").open("rb") as pyproject:
+            return Box(load(pyproject)).project.version
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
+        return None
 
 
 @api.get("/api/get", response_model=list[MoodDTO] | None)
@@ -193,6 +174,7 @@ def delete(pk: int) -> bool:
         return False
     return True
 
+PORT = int(Box(dotenv_values()).API_PORT)
 
 if __name__ == "__main__":
     console.print("✨ Running local server...")
