@@ -2,14 +2,14 @@
 
 """API Service"""
 
+from argparse import ArgumentParser
 from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
-from sys import argv
 from tomllib import load
 from typing import TYPE_CHECKING
 
-from box import Box, BoxError
+from box import Box
 from dotenv import dotenv_values
 from fastapi import FastAPI
 from peewee import AutoField, DateField, IntegerField, Model, SqliteDatabase
@@ -24,27 +24,47 @@ if TYPE_CHECKING:
 else:
     date = object  # pylint: disable=invalid-name
 
-DEBUG = False
-
 DB_PATH = "./db/"
 DB_FILE = "m00d.db"
 
 console = Console()
 catch_exceptions()
 
+PORT = int(Box(dotenv_values()).API_PORT)
 
-if len(argv) > 1 and argv[1] != "--stop":
+api = FastAPI(
+    docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url="/api/redoc"
+)
+
+
+@cache
+@api.get("/api/version")
+def get_version() -> str | None:
+    """Return version"""
     try:
-        PORT = int(argv[1])
-    except ValueError as e:
-        MSG = f"Invalid port: {argv[1]}"
-        raise SystemExit(MSG) from e
-else:
-    try:
-        PORT = int(Box(dotenv_values()).API_PORT)
-    except (BoxError, ValueError) as e:
-        MSG = "Invalid port"
-        raise SystemExit(MSG) from e
+        with Path("pyproject.toml").open("rb") as pyproject:
+            return Box(load(pyproject)).project.version
+    except Exception:  # pylint: disable=broad-exception-caught
+        console.print_exception()
+        return None
+
+
+parser = ArgumentParser(description="Mood tracker (Backend)")
+parser.add_argument("-d", "--debug", help="enable debug mode", action="store_true")
+parser.add_argument(
+    "port", help=f"port number (default: {PORT})", type=int, default=PORT, nargs="?"
+)
+parser.add_argument(
+    "-v",
+    "--version",
+    help="display version and exit",
+    action="version",
+    version=str(get_version()),
+)
+args = parser.parse_args()
+
+DEBUG: int = args.debug
+PORT: int = args.port or PORT
 
 
 class MoodDTO(BaseModel):
@@ -89,22 +109,6 @@ if not Path(DB_PATH + DB_FILE).exists():
     Mood.create_table()
 elif DEBUG:
     log("Using database", DB_PATH + DB_FILE)
-
-api = FastAPI(
-    docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url="/api/redoc"
-)
-
-
-@cache
-@api.get("/api/version")
-def get_version() -> str | None:
-    """Return version"""
-    try:
-        with Path("pyproject.toml").open("rb") as pyproject:
-            return Box(load(pyproject)).project.version
-    except Exception:  # pylint: disable=broad-exception-caught
-        console.print_exception()
-        return None
 
 
 @api.get("/api/get", response_model=list[MoodDTO] | None)
@@ -191,5 +195,7 @@ def delete(pk: int) -> bool:
 
 
 if __name__ == "__main__":
-    log("✨ Running local server...")
+    console.print("✨ Running local server...")
+    if DEBUG:
+        console.print("🔎 Debug mode ON")
     run(app="api:api", host="0.0.0.0", port=PORT, reload=True)  # noqa: S104

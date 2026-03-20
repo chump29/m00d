@@ -39,7 +39,6 @@ def step_impl(context: Context) -> None:
 @then("version is cached")
 def step_impl(_: Context) -> None:
     get_version()
-    get_version()
     v = get_version.cache_info()
     assert v.hits == 2 and v.misses == 1, "Version not cached"  # noqa: PT018, PLR2004
 
