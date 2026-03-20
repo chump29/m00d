@@ -61,7 +61,7 @@ parser.add_argument(
     action="version",
     version=str(get_version()),
 )
-args = parser.parse_args()
+args, _ = parser.parse_known_args()
 
 DEBUG: int = args.debug
 PORT: int = args.port or PORT
