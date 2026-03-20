@@ -5,3 +5,4 @@ Feature: Get API version
       When /version API endpoint is called
       Then version is returned
         And version is cached
+        And port "5558" is used

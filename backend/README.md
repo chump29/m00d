@@ -81,7 +81,7 @@ port@{shape: brace, label: "&nbsp; FastAPI exposes port 5558"}
 
 | 📋 Task |            🔧 Command (Full)            | 🔧 Command (Short) |
 |:-------:|:---------------------------------------:|:------------------:|
-|   DEV   | `uv run fastapi dev api.py --port 5558` |     `./api.py`     |
+|   DEV   | `uv run fastapi dev api.py --port 5558` | `./api.py [port]`  |
 |  PROD   | `uv run fastapi run api.py --port 5558` |      &mdash;       |
 
 #### API Documentation:

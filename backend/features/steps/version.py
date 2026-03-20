@@ -10,7 +10,7 @@ from pathlib import Path
 from tomllib import load
 from typing import TYPE_CHECKING
 
-from api import get_version  # pylint: disable=E0401
+from api import get_version, PORT  # pylint: disable=E0401
 from behave import given, then, when
 
 if TYPE_CHECKING:
@@ -42,3 +42,7 @@ def step_impl(_: Context) -> None:
     get_version()
     v = get_version.cache_info()
     assert v.hits == 2 and v.misses == 1, "Version not cached"  # noqa: PT018, PLR2004
+
+@then("port {port} is used")
+def step_impl(_: Context, port: str) -> None:
+    assert int(port.replace('"', "")) == PORT, f"Invalid port: {port}"

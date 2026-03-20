@@ -4,13 +4,13 @@
 
 from dataclasses import dataclass
 from functools import cache
-from os import getenv
 from pathlib import Path
+from sys import argv
 from tomllib import load
 from typing import TYPE_CHECKING
 
-from box import Box
-from dotenv import load_dotenv
+from box import Box, BoxError
+from dotenv import dotenv_values
 from fastapi import FastAPI
 from peewee import AutoField, DateField, IntegerField, Model, SqliteDatabase
 from playhouse.shortcuts import model_to_dict
@@ -32,7 +32,19 @@ DB_FILE = "m00d.db"
 console = Console()
 catch_exceptions()
 
-load_dotenv()
+
+if len(argv) > 1 and argv[1] != "--stop":
+    try:
+        PORT = int(argv[1])
+    except ValueError as e:
+        MSG = f"Invalid port: {argv[1]}"
+        raise SystemExit(MSG) from e
+else:
+    try:
+        PORT = int(Box(dotenv_values()).API_PORT)
+    except (BoxError, ValueError) as e:
+        MSG = "Invalid port"
+        raise SystemExit(MSG) from e
 
 
 class MoodDTO(BaseModel):
@@ -180,9 +192,4 @@ def delete(pk: int) -> bool:
 
 if __name__ == "__main__":
     log("✨ Running local server...")
-    run(
-        app="api:api",
-        host="0.0.0.0",  # noqa: S104
-        port=int(getenv("API_PORT") or 5558),
-        reload=True
-    )
+    run(app="api:api", host="0.0.0.0", port=PORT, reload=True)  # noqa: S104
