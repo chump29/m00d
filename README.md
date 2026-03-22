@@ -32,7 +32,7 @@ backend-->backendPort
 
 ---
 
-### ℹ️ Additional documentation
+### ℹ️ Documentation
 
 - [Frontend](./frontend/README.md "Frontend")
 - [Backend](./backend/README.md "Backend")
