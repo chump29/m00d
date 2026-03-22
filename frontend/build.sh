@@ -15,19 +15,19 @@ clear
 
 echo -e "${_title} ${_red}m00d FRONTEND${_nc} ${_title}\n"
 
-echo -en "${_task} ${_green}Installing dependencies${_nc} ... "
+echo -en "${_task} ${_yellow}Installing dependencies${_nc} ... "
 pnpm install --frozen-lockfile
 echo -e "${_cyan}Complete${_nc}\n"
 
-echo -e "\n${_lint} ${_green}Linting${_nc}:"
+echo -e "\n${_lint} ${_yellow}Linting${_nc}:"
 pnpm run lint
 
-echo -e "${_test} ${_green}Testing${_nc}:"
+echo -e "${_test} ${_yellow}Testing${_nc}:"
 pnpm run test
 
 source docker.sh
 
-echo -e "${_done} ${_yellow}Done${_nc}!\n"
+echo -e "${_done} ${_green}Done${_nc}!\n"
 
 unset _red
 unset _green

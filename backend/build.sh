@@ -15,19 +15,19 @@ clear
 
 echo -e "${_title} ${_red}m00d BACKEND${_nc} ${_title}\n"
 
-echo -en "${_task} ${_green}Installing dependencies${_nc} ... "
+echo -en "${_task} ${_yellow}Installing dependencies${_nc} ... "
 uv sync --extra dev --quiet
 echo -e "${_cyan}Complete${_nc}\n"
 
-echo -e "${_lint} ${_green}Linting${_nc}:\n"
+echo -e "${_lint} ${_yellow}Linting${_nc}:\n"
 source lint.sh
 
-echo -e "\n${_test} ${_green}Testing${_nc}:\n"
+echo -e "\n${_test} ${_yellow}Testing${_nc}:\n"
 source test.sh
 
 source docker.sh
 
-echo -e "\n${_done} ${_yellow}Done${_nc}!\n"
+echo -e "\n${_done} ${_green}Done${_nc}!\n"
 
 unset _red
 unset _green
