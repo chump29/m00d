@@ -66,6 +66,7 @@ const Display = (): JSX.Element => {
       ]
     },
     tooltip: {
+      shared: false,
       theme: "dark",
       marker: {
         show: false
