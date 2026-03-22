@@ -1,4 +1,5 @@
 .htmlignore
+.husky
 .stylelint*
 *.md
 *.sh
