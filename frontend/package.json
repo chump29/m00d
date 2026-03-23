@@ -61,17 +61,15 @@
 		"@vitejs/plugin-react": "^6.0.1",
 		"globals": "^17.4.0",
 		"husky": "^9.1.7",
-		"jest-environment-jsdom": "^30.3.0",
 		"lint-staged": "^16.4.0",
 		"nolyfill": "^1.0.44",
 		"rimraf": "^6.1.3",
 		"rollup-plugin-jsx-remove-attributes": "^3.1.2",
-		"sharp": "^0.34.5",
 		"stylelint": "^17.5.0",
 		"stylelint-config-standard": "^40.0.0",
 		"tailwindcss": "^4.2.2",
 		"typescript": "~5.9.3",
-		"vite": "^8.0.1",
+		"vite": "^8.0.2",
 		"vite-plugin-package-version": "^1.1.0",
 		"vite-plugin-simple-html": "^1.1.0",
 		"vite-plugin-webfont-dl": "^3.12.0",
@@ -86,8 +84,7 @@
 	"packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
 	"pnpm": {
 		"onlyBuiltDependencies": [
-			"esbuild",
-			"sharp"
+			"esbuild"
 		],
 		"overrides": {
 			"es-set-tostringtag": "npm:@nolyfill/es-set-tostringtag@^1",

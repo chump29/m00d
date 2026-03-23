@@ -8,7 +8,19 @@ import { defineConfig } from "vitest/config"
 
 export default defineConfig({
   build: {
-    chunkSizeWarningLimit: 750
+    chunkSizeWarningLimit: 750,
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              name: "vendor",
+              test: /node_modules/
+            }
+          ]
+        }
+      }
+    }
   },
   plugins: [
     react(),
