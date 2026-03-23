@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 
 from api import PORT, get_version  # pylint: disable=E0401
 from behave import given, then, when
+from box import Box
 
 if TYPE_CHECKING:
     from behave.runner import Context
@@ -22,7 +23,7 @@ else:
 @given("a request for the API version")
 def step_impl(context: Context) -> None:
     with Path("pyproject.toml").open("rb") as pyproject:
-        context.real_version = load(pyproject)["project"]["version"]
+        context.real_version = Box(load(pyproject)).project.version
 
 
 @when("/version API endpoint is called")
