@@ -25,9 +25,9 @@ def before_feature(context: Context, feature: Feature) -> None:
     if "crud" not in feature.tags:
         return
     mood = get_by_date(DATE)
-    if mood and mood.id:  # clean up any old data
+    if mood and mood.id:  # * clean up any old data
         delete(mood.id)
-    context.mood = add(MoodDTO(mood=randbelow(2) + 1, date=DATE))  # 1-2
+    context.mood = add(MoodDTO(mood=randbelow(2) + 1, date=DATE))  # * 1-2
     assert context.mood, "Could not add mood data"
 
 

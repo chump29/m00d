@@ -22,13 +22,13 @@ DATE = date(1111, 11, 11)
 
 
 @given("that a user wants a mood by date")
-def step_impl(context: Context) -> None:
-    assert context.mood, "Invalid mood data"
+def step_impl(_: Context) -> None:
+    pass
 
 
 @when("/get_by_date API endpoint is called")
-def step_impl(context: Context) -> None:
-    assert context.failed is not True, "/get_by_date call failed"
+def step_impl(_: Context) -> None:
+    pass  # * NOTE: called by before_feature()
 
 
 @then("mood data is returned")
@@ -43,10 +43,10 @@ def step_impl(context: Context) -> None:
 
 @then("it can be updated")
 def step_impl(context: Context) -> None:
-    rnd = randbelow(2) + 4  # 4-5
+    rnd = randbelow(2) + 4  # * 4-5
     m = update(context.mood.id, MoodDTO(mood=rnd, date=DATE))
     assert m and m.mood == rnd, "Could not update mood"  # noqa: PT018
-    m = get_one(context.mood.id)  # refetch
+    m = get_one(context.mood.id)  # * refetch
     assert (  # noqa: PT018
         m and m.id == context.mood.id
     ), "Could not get updated mood data"

@@ -20,12 +20,12 @@ uv sync --extra dev --quiet
 echo -e "${_cyan}Complete${_nc}\n"
 
 echo -e "${_lint} ${_yellow}Linting${_nc}:\n"
-source lint.sh
+./lint.sh
 
 echo -e "\n${_test} ${_yellow}Testing${_nc}:\n"
-source test.sh
+./test.sh
 
-source docker.sh
+./docker.sh
 
 echo -e "\n${_done} ${_green}Done${_nc}!\n"
 
