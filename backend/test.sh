@@ -1,3 +1,5 @@
 #!/usr/bin/env -S bash -e
 
-uv run behave --stop
+uv run coverage run --module behave --stop
+echo
+uv run coverage report --show-missing

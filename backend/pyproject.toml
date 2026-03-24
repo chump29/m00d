@@ -39,6 +39,7 @@ GitHub = "https://github.com/chump29/m00d"
 [project.optional-dependencies]
 dev = [
     "behave>=1.3.3",
+    "coverage>=7.13.5",
     "pip-review>=1.3.0",
     "pre-commit>=4.5.1",
     "pylint>=4.0.5",
@@ -118,11 +119,17 @@ python-downloads = "manual"
 [tool.uv.build-backend]
 namespace = true
 source-exclude = [
+    ".coverage",
     ".dockerignore",
+    ".pre-commit-config.yaml",
     ".python-version",
+    ".ruff_cache/**/*",
+    ".venv/**/*",
     "*.sh",
-    "/features",
+    "api.rest",
+    "db/*",
     "Dockerfile",
+    "features/**/*",
     "README.md",
     "uv.lock"
 ]
