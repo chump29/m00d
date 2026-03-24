@@ -40,7 +40,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 ENV TZ=Etc/GMT
 
-HEALTHCHECK --interval=60s CMD ./usr/share/nginx/html/healthcheck.sh
+HEALTHCHECK --interval=60s CMD /usr/share/nginx/html/healthcheck.sh
 
 EXPOSE 80
 

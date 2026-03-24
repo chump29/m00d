@@ -44,7 +44,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV TZ=Etc/GMT
 
-HEALTHCHECK --interval=60s --start-interval=5s CMD ./backend/healthcheck.sh
+HEALTHCHECK --interval=60s --start-interval=5s CMD /backend/healthcheck.sh
 
 EXPOSE 5558
 

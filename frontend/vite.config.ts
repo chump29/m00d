@@ -52,6 +52,12 @@ export default defineConfig({
     globals: true,
     setupFiles: "./src/setup.ts",
     silent: true,
+    coverage: {
+      enabled: true,
+      reporter: [
+        "text"
+      ]
+    },
     include: [
       "./src/**/*.test.tsx"
     ],
